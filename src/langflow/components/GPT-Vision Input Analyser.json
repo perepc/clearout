@@ -1,0 +1,161 @@
+{
+    "data": {
+        "edges": [],
+        "nodes": [
+            {
+                "data": {
+                    "type": "CustomComponent",
+                    "node": {
+                        "template": {
+                            "AIMLApiKey": {
+                                "type": "str",
+                                "required": true,
+                                "placeholder": "",
+                                "list": false,
+                                "show": true,
+                                "multiline": false,
+                                "fileTypes": [],
+                                "file_path": "",
+                                "password": true,
+                                "name": "AIMLApiKey",
+                                "advanced": false,
+                                "dynamic": false,
+                                "info": "",
+                                "title_case": true,
+                                "value": ""
+                            },
+                            "MaxTokens": {
+                                "type": "int",
+                                "required": true,
+                                "placeholder": "",
+                                "list": false,
+                                "show": true,
+                                "multiline": false,
+                                "fileTypes": [],
+                                "file_path": "",
+                                "password": false,
+                                "name": "MaxTokens",
+                                "display_name": "MaxTokens",
+                                "advanced": false,
+                                "dynamic": false,
+                                "info": "",
+                                "title_case": true,
+                                "value": "300"
+                            },
+                            "code": {
+                                "type": "code",
+                                "required": true,
+                                "placeholder": "",
+                                "list": false,
+                                "show": true,
+                                "multiline": true,
+                                "value": "from langflow import CustomComponent\nfrom langflow.field_typing import Data\n\nfrom langflow import CustomComponent\nimport subprocess\nimport sys\nimport base64\nfrom tempfile import NamedTemporaryFile\nimport requests\n\ndef install(package):\n    subprocess.check_call([sys.executable, \"-m\", \"pip\", \"install\", package])\n    return 1\n    \ninstall(\"openai\")\n\nclass FileUploadComponent(CustomComponent):\n    display_name = \"AIMLApi GPT-Vision\"\n    description = \"This component process an image with a prompt by the user to produce info about the input image.\"\n    #import assemblyai as aai\n    \n    def build_config(self):\n        return {\n            \"uploaded_file\": {\n                \"display_name\": \"File\",\n                #\"suffixes\": ['.jpg', '.png', '.jpeg'],\n                #'field_type': 'file', \n                #'file_types': ['jpg', 'png', 'jpeg'],\n                'required': False\n            },\n            #\"uploaded_file_base64\": {\n            #    \"display_name\": \"File Base64\",\n                #\"suffixes\": ['.jpg', '.png', '.jpeg'],\n                #'field_type': 'file', \n                #'file_types': ['jpg', 'png', 'jpeg'],\n            #    'required': False\n            #},\n            \"model\": {\n                \"display_name\": \"model\",\n                \"advanced\": False,\n                \"required\": True,\n                \"options\": [\n                    \"gpt-4o\",\n                ],\n            },\n            \"MaxTokens\": {\n                \"display_name\": \"MaxTokens\",\n                \"advanced\": False,\n                \"required\": True,\n                \"default\": 300,\n            },\n            \"AIMLApiKey\":{\n                \"password\": True\n            }\n        }\n    \n    def build(self, uploaded_file: str, model: str, prompt: str, AIMLApiKey: str, MaxTokens: int) -> str:\n        from openai import OpenAI\n        client = OpenAI(\n            api_key=AIMLApiKey\n        )\n\n        #with open(uploaded_file, 'rb') as file:\n        #    file_contents = file.read()\n        #b64_contents = base64.b64encode(file_contents).decode('utf-8')\n        \n        \n        headers = {\n          \"Content-Type\": \"application/json\",\n          \"Authorization\": f\"Bearer {AIMLApiKey}\"\n        }\n\n        \n        #if uploaded_file_base64:\n        #    image_url= f\"data:image/jpeg;base64,{uploaded_file_base64}\"\n        #else:\n        #    image_url = f\"\"\"{uploaded_file}\"\"\"\n            \n        payload = {\n        \"model\": model,\n        \"messages\": [\n            {\n              \"role\": \"user\",\n              \"content\": [\n                {\n                  \"type\": \"text\",\n                  \"text\": prompt\n                },\n                {\n                  \"type\": \"image_url\",\n                  \"image_url\": {\n                    #\"url\": f\"data:image/jpeg;base64,{uploaded_file_base64}\"\n                    \"url\": f\"\"\"{uploaded_file}\"\"\"\n                  }\n                }\n              ]\n            }\n          ],\n          \"max_tokens\": MaxTokens\n        }\n\n        response = requests.post(\"https://api.aimlapi.com/chat/completions\", headers=headers, json=payload)\n        content = response.json()['choices'][0]['message']['content']\n        return str(content)",
+                                "fileTypes": [],
+                                "file_path": "",
+                                "password": false,
+                                "name": "code",
+                                "advanced": false,
+                                "dynamic": true,
+                                "info": "",
+                                "title_case": true
+                            },
+                            "model": {
+                                "type": "str",
+                                "required": true,
+                                "placeholder": "",
+                                "list": true,
+                                "show": true,
+                                "multiline": false,
+                                "fileTypes": [],
+                                "file_path": "",
+                                "password": false,
+                                "options": [
+                                    "gpt-4o"
+                                ],
+                                "name": "model",
+                                "display_name": "model",
+                                "advanced": false,
+                                "dynamic": false,
+                                "info": "",
+                                "title_case": true,
+                                "value": "gpt-4o"
+                            },
+                            "prompt": {
+                                "type": "str",
+                                "required": true,
+                                "placeholder": "",
+                                "list": false,
+                                "show": true,
+                                "multiline": false,
+                                "fileTypes": [],
+                                "file_path": "",
+                                "password": false,
+                                "name": "prompt",
+                                "advanced": false,
+                                "dynamic": false,
+                                "info": "",
+                                "title_case": true,
+                                "value": "Name the items in the image"
+                            },
+                            "uploaded_file": {
+                                "type": "str",
+                                "required": false,
+                                "placeholder": "",
+                                "list": false,
+                                "show": true,
+                                "multiline": false,
+                                "fileTypes": [],
+                                "file_path": "",
+                                "password": false,
+                                "name": "uploaded_file",
+                                "display_name": "File",
+                                "advanced": false,
+                                "dynamic": false,
+                                "info": "",
+                                "title_case": true,
+                                "value": "https://m.media-amazon.com/images/I/71yt+7dZSPL._AC_UF894,1000_QL80_.jpg"
+                            },
+                            "_type": "CustomComponent"
+                        },
+                        "description": "This component process an image with a prompt by the user to produce info about the input image.",
+                        "base_classes": [
+                            "str"
+                        ],
+                        "display_name": "GPT-Vision Input Analyser",
+                        "documentation": "",
+                        "custom_fields": {
+                            "uploaded_file": null,
+                            "model": null,
+                            "prompt": null,
+                            "AIMLApiKey": null,
+                            "MaxTokens": null
+                        },
+                        "output_types": [
+                            "str"
+                        ],
+                        "field_formatters": {},
+                        "beta": true,
+                        "official": false
+                    },
+                    "id": "CustomComponent-acLku"
+                },
+                "id": "CustomComponent-acLku",
+                "position": {
+                    "x": 0,
+                    "y": 0
+                },
+                "type": "genericNode"
+            }
+        ],
+        "viewport": {
+            "x": 1,
+            "y": 1,
+            "zoom": 1
+        }
+    },
+    "description": "This component process an image with a prompt by the user to produce info about the input image.",
+    "name": "GPT-Vision Input Analyser",
+    "id": "CustomComponent-acLku",
+    "is_component": true,
+    "last_tested_version": "0.6.18"
+}

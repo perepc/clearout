@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "clearout"
+version = "0.1.0"
+description = "LangFlow Hackathon Project. A recycle and disposal assistant based on image recognition"
+authors = ["Your Name <you@example.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.12"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
