@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "visionanalizer"
+version = "0.1.0"
+description = ""
+authors = ["Pere Pasamonte <perepc@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+langchain-groq = "^0.1.6"
+langchain = "^0.2.10"
+replicate = "^0.29.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
